@@ -1,0 +1,33 @@
+{
+  "folders": [
+    {
+      "path": "./software"
+    }
+  ],
+  "settings": {
+    "search.exclude": {
+      "_assets/**": true
+    },
+    "editor.formatOnSave": true,
+    "[php]": {
+      "editor.formatOnSave": false
+    },
+    "peacock.color": "#146",
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#186192",
+      "activityBar.activeBorder": "#e45bad",
+      "activityBar.background": "#186192",
+      "activityBar.foreground": "#e7e7e7",
+      "activityBar.inactiveForeground": "#e7e7e799",
+      "activityBarBadge.background": "#e45bad",
+      "activityBarBadge.foreground": "#15202b",
+      "statusBar.background": "#114466",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#186192",
+      "titleBar.activeBackground": "#114466",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.inactiveBackground": "#11446699",
+      "titleBar.inactiveForeground": "#e7e7e799"
+    }
+  }
+}
