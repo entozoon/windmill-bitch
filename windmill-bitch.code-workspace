@@ -31,7 +31,8 @@
     },
     "files.associations": {
       "*.h": "cpp",
-      "system_error": "cpp"
+      "system_error": "cpp",
+      "iterator": "cpp"
     }
   }
 }

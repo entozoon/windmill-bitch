@@ -1,10 +1,11 @@
-typedef struct windmill_
+struct windmill
 {
   float lat;
   float lng;
   const char name[49];
-} windmill_t;
-PROGMEM windmill_t windmills[1171] = {
+};
+typedef struct windmill Windmill;
+PROGMEM Windmill windmills[1171] = {
     {51.88544, -0.5273, "Dunstable"},
     {52.06897, -0.4734, "Houghton Conquest"},
     {52.03417, -0.6269, "Hulcote"},

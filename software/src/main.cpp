@@ -48,14 +48,27 @@ void loop()
     Serial.print(lat, 6);
     Serial.print(F(" Lng: "));
     Serial.println(lng, 6);
+    // Windmill windmillNearest = {-40, 175, "C sucks"};
+    double nearestDistance = 9999999;
+    String nearestName = "Foo";
     for (unsigned int i = 0; i < sizeof(windmills) / sizeof(windmills[0]); i++)
     {
-      Serial.print(windmills[i].name);
-      Serial.print(" ");
-      Serial.println(gps.distanceBetween(lat, lng, windmills[i].lat, windmills[i].lng));
+      double distance = gps.distanceBetween(lat, lng, windmills[i].lat, windmills[i].lng);
+      // Serial.print(windmills[i].name);
+      // Serial.print(" ");
+      // Serial.println(distance);
+      if (distance < nearestDistance)
+      {
+        nearestDistance = distance;
+        // Don't understand C enough to know why this won't compile
+        // windmillNearest = windmills[i];
+        nearestName = windmills[i].name;
+      }
       // delay(100);
     }
-    Serial.println("");
-    delay(10000); // do a nice big fat delay here
+    Serial.println(nearestName);
+    Serial.print(nearestDistance);
+    Serial.println("(m) ");
+    delay(10000); // A nice big fat delay
   }
 }
