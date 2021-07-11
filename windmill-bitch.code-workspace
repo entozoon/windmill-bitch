@@ -28,6 +28,10 @@
       "titleBar.activeForeground": "#e7e7e7",
       "titleBar.inactiveBackground": "#11446699",
       "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "files.associations": {
+      "*.h": "cpp",
+      "system_error": "cpp"
     }
   }
 }

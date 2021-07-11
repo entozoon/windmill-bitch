@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include "TinyGPS++.h"
 #include "SoftwareSerial.h"
+#include "windmills.h"
 SoftwareSerial SerialGPS(D1, D2); // TX, RX (on GPS module)
 TinyGPSPlus gps;
 void setup()
@@ -10,7 +11,7 @@ void setup()
   SerialGPS.begin(9600);
   // Spews gargage in serial monitor after upload but.. should calm down and work; certainly after a reset. No idea why (might just be platformio)
   WiFi.mode(WIFI_OFF); // Poss also sleep to save power (in case car runs USB overnight?)
-  // delay(4000); // Pause for upload issues
+  delay(4000);         // Pause for upload issues
   Serial.println(F("\nLet's go!"));
 }
 void loop()
@@ -33,16 +34,28 @@ void loop()
   }
   if (gps.location.isUpdated())
   {
-    Serial.println("Satellite Count:");
-    Serial.println(gps.satellites.value());
-    Serial.println("Latitude:");
-    Serial.println(gps.location.lat(), 6);
-    Serial.println("Longitude:");
-    Serial.println(gps.location.lng(), 6);
-    Serial.println("Speed MPH:");
-    Serial.println(gps.speed.mph());
-    Serial.println("Altitude Feet:");
-    Serial.println(gps.altitude.feet());
+    // Serial.print(F("Satellite Count: "));
+    // Serial.println(gps.satellites.value());
+    // Serial.print(F("Speed MPH: "));
+    // Serial.println(gps.speed.mph());
+    // Serial.print(F("Altitude(m): "));
+    // Serial.println(gps.altitude.meters());
+    // Serial.print(F("Year: "));
+    // Serial.println(gps.date.year());
+    float lat = (float)gps.location.lat();
+    float lng = (float)gps.location.lng();
+    Serial.print(F("Lat: "));
+    Serial.print(lat, 6);
+    Serial.print(F(" Lng: "));
+    Serial.println(lng, 6);
+    for (unsigned int i = 0; i < sizeof(windmills) / sizeof(windmills[0]); i++)
+    {
+      Serial.print(windmills[i].name);
+      Serial.print(" ");
+      Serial.println(gps.distanceBetween(lat, lng, windmills[i].lat, windmills[i].lng));
+      // delay(100);
+    }
     Serial.println("");
+    delay(10000); // do a nice big fat delay here
   }
 }
