@@ -5,6 +5,7 @@
 #include "windmills.h"
 SoftwareSerial SerialGPS(D1, D2); // TX, RX (on GPS module)
 TinyGPSPlus gps;
+unsigned long waitingMillis = 0;
 void setup()
 {
   Serial.begin(115200);
@@ -16,7 +17,7 @@ void setup()
 }
 void loop()
 {
-  // Raw data output, e.g.
+  // ******** Debugging raw data output *********
   // $GPRMC,224940.00,A,5318.29323,N,00122.51004,W,2.116,,100721,,,A*6D
   // $GPVTG,,T,,M,2.116,N,3.919,K,A*25
   // $GPGGA,224940.00,5318.29323,N,00122.51004,W,1,05,6.16,92.9,M,47.5,M,,*70
@@ -28,9 +29,15 @@ void loop()
   // {
   //   Serial.write(SerialGPS.read());
   // }
+  // ********************************************
   while (SerialGPS.available())
   {
     gps.encode(SerialGPS.read());
+  }
+  if (!gps.location.isValid() && millis() > waitingMillis + 10000)
+  {
+    waitingMillis = millis();
+    Serial.println("Waiting for lock on");
   }
   if (gps.location.isUpdated())
   {
@@ -44,13 +51,17 @@ void loop()
     // Serial.println(gps.date.year());
     float lat = (float)gps.location.lat();
     float lng = (float)gps.location.lng();
-    Serial.print(F("Lat: "));
+    Serial.print(F("\nLat: "));
     Serial.print(lat, 6);
-    Serial.print(F(" Lng: "));
+    Serial.print(F("Lng: "));
     Serial.println(lng, 6);
+    Serial.print(F("Course deg: "));
+    Serial.println(gps.course.deg());
+    Serial.print(F("Course human: "));
+    Serial.println(gps.cardinal(gps.course.value()));
     // Windmill windmillNearest = {-40, 175, "C sucks"};
     double nearestDistance = 9999999;
-    String nearestName = "Foo";
+    int nearestIndex = 0;
     for (unsigned int i = 0; i < sizeof(windmills) / sizeof(windmills[0]); i++)
     {
       double distance = gps.distanceBetween(lat, lng, windmills[i].lat, windmills[i].lng);
@@ -59,16 +70,22 @@ void loop()
       // Serial.println(distance);
       if (distance < nearestDistance)
       {
-        nearestDistance = distance;
         // Don't understand C enough to know why this won't compile
         // windmillNearest = windmills[i];
-        nearestName = windmills[i].name;
+        nearestIndex = i;
+        nearestDistance = distance;
       }
       // delay(100);
     }
-    Serial.println(nearestName);
+    Serial.println(windmills[nearestIndex].name);
     Serial.print(nearestDistance);
-    Serial.println("(m) ");
-    delay(10000); // A nice big fat delay
+    Serial.println("m ");
+    Serial.print(gps.courseTo(
+        gps.location.lat(),
+        gps.location.lng(),
+        windmills[nearestIndex].lat,
+        windmills[nearestIndex].lng));
+    Serial.println("deg from course ");
+    delay(1000); // A nice big fat delay
   }
 }
