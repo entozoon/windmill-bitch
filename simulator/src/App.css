@@ -1,0 +1,16 @@
+.line {
+  position: relative;
+  width: 1px;
+  height: 300px;
+}
+.line::before {
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  display: block;
+  content: "";
+  background: inherit;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
